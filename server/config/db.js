@@ -3,12 +3,17 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    const uri = process.env.MONGO_URI;
+    const uri = process.env.MONGO_URL || process.env.MONGO_URI;
+
     if (!uri) {
-      throw new Error('MONGO_URI is not set. Check your .env file.');
+      throw new Error('MONGO_URL is not set. Check your environment variables.');
     }
+
     await mongoose.connect(uri);
-    console.log(`MongoDB connected: ${mongoose.connection.host}/${mongoose.connection.name}`);
+
+    console.log(
+      `MongoDB connected: ${mongoose.connection.host}/${mongoose.connection.name}`
+    );
   } catch (err) {
     console.error('MongoDB connection failed:', err.message);
     process.exit(1);
